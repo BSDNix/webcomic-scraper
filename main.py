@@ -1,6 +1,7 @@
 from comic_collection import ComicCollection
 import datetime
 import config as cfg
+import argparse
 
 date = datetime.datetime.today()
 year = date.strftime("%Y")
@@ -37,8 +38,22 @@ HTMLFOOT=f"""
 """
 
 def main():
-    my_comics = ComicCollection('comics')
-    comics=my_comics.get_all_comics()
+    parser = argparse.ArgumentParser(description="Fetch comics.")
+    parser.add_argument('--one', type=str, help="Fetch one comic by title.")
+    args = parser.parse_args()
+
+    # Assume comics is a list of comic objects.
+    mycomics = ComicCollection('comics')  
+    fetcher = ComicFetcher(comics)
+
+    if args.one:
+        # Fetch one comic based on the provided title
+        result = fetcher.get_one_comic(args.one)
+        if result:
+            print(result)
+    else:
+        my_comics = ComicCollection('comics')
+        comics=my_comics.get_all_comics()
 
     f = open(f"{cfg.OUTPUT_DIR}/{cfg.OUTPUT_FILE}", "w")
     f.write(HTMLHEAD + comics + HTMLFOOT)
