@@ -112,6 +112,18 @@ class ComicCollection(object):
                 print("Failed.")
         return ENDRESULT
 
+    def get_one_comic(self, comic_title):
+    for comic in self.comics:
+        if comic.title == comic_title:
+            print(f"Fetching comic: {comic.title}")
+            try:
+                return comic.fetch_comic()
+            except:
+                print("Failed to fetch the comic.")
+                return None
+    print("Comic not found.")
+    return None
+
     def walk_package(self, package):
         imported_package = __import__(package, fromlist=['blah'])
 
